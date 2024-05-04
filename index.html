@@ -4,220 +4,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Abacus</title>
 
     <!-- <style>
-        .c{
+        .column {
             background-color: rgb(33, 2, 2);
         }
     </style> -->
 
-    <script>
+</head>
 
-        var beadSize = 32, beadStroke = 'rgba(0,0,0,.25)', beadFill = "radial-gradient(ellipse farthest-corner at 25px 10px, rgba(200,0,9,1),rgba(100,0,9,1))", rodStroke = "#333", rodThickness = 5, rodFill = "grey", frameFill = "rgb(82, 82, 82)", frameStroke = "#88603f", frameThickness = 8, width = 400, height = 211;
-        // var beadFill = "grey";
-        //var beadFill = "rgb(33, 2, 2)"
-        var abacus;
-        function abacusMain() { 
-            s = ''; 
-            s += '<div id="abacus" style="position:relative; width:400px; height:290px; margin:auto; display:block;">'; 
-            s += '</div>'; 
-            document.write(s); 
-            createHTML(); 
-            abacus = new Abacus(); 
+<body>
+    <div id="abacus" style="position:relative; width:400px; height:290px; margin:auto; display:block;"></div>
+    <div style="margin:auto; padding:10px;">
+       
+    </div>
+
+    <script>
+        var beadSize = 32,
+            beadStroke = 'rgba(0,0,0,.25)',
+            beadFill = "radial-gradient(ellipse farthest-corner at 25px 10px, rgba(200,0,9,1),rgba(100,0,9,1))",
+            rodStroke = "#333",
+            rodThickness = 5,
+            rodFill = "grey",
+            frameFill = "rgb(82, 82, 82)",
+            frameStroke = "#88603f",
+            frameThickness = 8,
+            width = 400,
+            height = 211;
+        
+        function abacusMain() {
+            createHTML();
+            abacus = new Abacus();
         }
+
         function createHTML() {
             var wrapper = document.getElementById('abacus');
-            var abacusBorder = createDiv({ 
-                width: (width + frameThickness * 2) + "px", 
-                borderRadius: '6px', 
+            var abacusOrder = createDiv({
+                width: (width + frameThickness * 2) + "px",
+                borderRadius: '6px',
                 border: '8px outset ' + frameStroke,
-                background: frameStroke 
-            })
-            var container = createDiv({
-                 border: frameThickness + "px inset " + frameStroke, 
-                 background: frameFill, 
-                 background: 'linear-gradient(to top left,rgb(88, 66, 46),rgb(113, 79, 51))',
-                  display: 'flex', 
-                  borderRadius: '5px', 
-                  position: 'relative', 
-                  width: width + "px", 
-                });
-            var divider = createDiv({ 
-                position: 'absolute', 
-                top: (height / 3) + 'px', 
-                left: 0 + 'px', 
-                width: (width - 2) + "px", 
-                height: frameThickness + 'px', 
-                border: "1px solid rgba(0,0,0,.25)", 
-                background: frameStroke, 
-                boxShadow: "0px 5px 10px rgba(0,0,0,.25)" 
+                background: frameStroke
             });
-            for (var i = 0; i < 5; i++) { 
-                container.appendChild(createColumnHTML(i)); 
+            var container = createDiv({
+                border: frameThickness + "px inset " + frameStroke,
+                background: 'linear-gradient(to top left,rgb(88, 66, 46),rgb(113, 79, 51))',
+                display: 'flex',
+                borderRadius: '5px',
+                position: 'relative',
+                width: width + "px",
+            });
+            var divider = createDiv({
+                position: 'absolute',
+                top: (height / 3) + 'px',
+                left: 0 + 'px',
+                width: (width - 2) + "px",
+                height: frameThickness + 'px',
+                border: "1px solid rgba(0,0,0,.25)",
+                background: frameStroke,
+                boxShadow: "0px 5px 10px rgba(0,0,0,.25)"
+            });
+
+            for (var i = 0; i < 5; i++) {
+                container.appendChild(createColumnHTML(i));
             }
             container.appendChild(divider);
-            abacusBorder.appendChild(container);
-            wrapper.appendChild(abacusBorder);
+            abacusOrder.appendChild(container);
+            wrapper.appendChild(abacusOrder);
             wrapper.appendChild(createInputHTML());
         }
+
         function createInputHTML() {
             var container = createDiv({ margin: 'auto', padding: '10px' });
-            var e = document.createElement('input');
-            e.oninput = function () { abacus.setValue(Number(e.value)); refresh(); }
-            e.id = "abacus-readout";
-            e.style.fontSize = "28px";
-            e.style.textAlign = "center";
-            e.style.width = width + 6 + "px" ;
-            e.style.borderRadius = '3px';
-            e.style.background = "#eee"; container.appendChild(e);
+            var input = document.createElement('input');
+            input.oninput = function () { abacus.setValue(Number(input.value)); refresh(); };
+            input.id = "abacus-readout";
+            input.style.fontSize = "28px";
+            input.style.textAlign = "center";
+            input.style.width = width + 6 + "px";
+            input.style.borderRadius = '3px';
+            input.style.background = "#eee";
+            container.appendChild(input);
             return container;
         }
+
         function createDiv(style) {
-            var e = document.createElement('div');
-            for (var s in style) { 
-                e.style[s] = style[s];
+            var element = document.createElement('div');
+            for (var prop in style) {
+                element.style[prop] = style[prop];
             }
-            return e;
+            return element;
         }
+
         function createBeadHTML(col, row) {
-            var bead = createDiv({ 
-                background: beadFill, 
+            var bead = createDiv({
+                background: beadFill,
                 borderRadius: "43%",
-                border: '1px solid ' + beadStroke, 
+                border: '1px solid ' + beadStroke,
                 width: beadSize + 'px',
-                height: (beadSize / 2) + 'px', 
-                transition: 'all .5s', 
-                boxShadow: "rgba(0,0,0,.2) -5px 5px 8px", 
-                cursor: 'pointer' });
-                bead.id = 'bead-' + col + '-' + row;
-                bead.onclick = function () { 
-                    abacus.toggleBead(col, row); 
-                    document.getElementById('abacus-readout').value = abacus.getValue();
-                    refresh(); 
-                }
+                height: (beadSize / 2) + 'px',
+                transition: 'all .5s',
+                boxShadow: "rgba(0,0,0,.2) -5px 5px 8px",
+                cursor: 'pointer'
+            });
+            bead.id = 'bead-' + col + '-' + row;
+            bead.addEventListener('click', function () {
+                abacus.toggleBead(col, row);
+                document.getElementById('abacus-readout').value = abacus.getValue();
+                refresh();
+            });
             return bead;
         }
+
         function createColumnHTML(idx) {
             var col = createDiv({
-                 height: height + 'px', 
-                 border: '',
-                 position: 'relative', 
-                 flex: 1 }); 
+                height: height + 'px',
+                position: 'relative',
+                flex: 1
+            });
             var bar = createDiv({
                 width: rodThickness + 'px',
                 height: (height - 2) + 'px',
                 background: rodFill,
-                border: "1px solid " + rodStroke, 
-                position: 'absolute', 
-                left: '50%', 
-                transform: 'translateX(-50%)', 
+                border: "1px solid " + rodStroke,
+                position: 'absolute',
+                left: '50%',
+                transform: 'translateX(-50%)',
                 boxShadow: '-5px 0px 10px rgba(0,0,0,.25)'
-            })
+            });
             var top = createDiv({
-                 position: 'absolute',
-                 top: 0, left: '50%', 
-                 transform: 'translateX(-50%)' 
-                }); 
-            var bottom = createDiv({ 
-                position: 'absolute', 
-                bottom: 0, 
-                left: '50%', 
-                transform: 'translateX(-50%)' 
-            }); 
+                position: 'absolute',
+                top: 0, left: '50%',
+                transform: 'translateX(-50%)'
+            });
+            var bottom = createDiv({
+                position: 'absolute',
+                bottom: 0,
+                left: '50%',
+                transform: 'translateX(-50%)'
+            });
             for (var i = 0; i < 7; i++) {
-                var b = createBeadHTML(idx, i);
-                 if (i < 2) top.appendChild(b); 
-                 else bottom.appendChild(b);
-                 }
-            col.appendChild(bar); col.appendChild(top); col.appendChild(bottom); return col;
+                var bead = createBeadHTML(idx, i);
+                if (i < 2) {
+                    top.appendChild(bead);
+                } else {
+                    bottom.appendChild(bead);
+                }
+            }
+            col.appendChild(bar);
+            col.appendChild(top);
+            col.appendChild(bottom);
+            return col;
         }
+
         function refresh() {
             for (var col = 0; col < abacus.columns.length; col++) {
-                if (!abacus.columns[col]) { console.log("ERROR. COlumn does not exist"); return; }
+                if (!abacus.columns[col]) {
+                    console.log("ERROR. Column does not exist");
+                    return;
+                }
                 for (var row = 0; row < abacus.columns[col].length; row++) {
-                    var bead = document.getElementById('bead-' + col + '-' + row); 
+                    var bead = document.getElementById('bead-' + col + '-' + row);
                     var toggled = abacus.columns[col][row];
-                    if (row < 2) { 
-                        bead.style.transform = toggled ? "translateY(34px)" : "translateY(0px)"; 
+                    if (row < 2) {
+                        bead.style.transform = toggled ? "translateY(34px)" : "translateY(0px)";
+                    } else {
+                        bead.style.transform = toggled ? "translateY(-41px)" : "translateY(0px)";
                     }
-                    else {
-                         bead.style.transform = toggled ? "translateY(-41px)" : "translateY(0px)"; }
                 }
             }
         }
+
         var Abacus = function () {
+            this.columns = [];
+            for (var i = 0; i < 5; i++) {
+                this.columns.push([0, 0, 0, 0, 0, 0, 0]);
+            }
+
             function getDisplayStates(n) {
-                var states = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, 1, 1, 0, 0, 0], [0, 0, 1, 1, 1, 0, 0], [0, 0, 1, 1, 1, 1, 0], [0, 1, 0, 0, 0, 0, 0], [0, 1, 1, 0, 0, 0, 0], [0, 1, 1, 1, 0, 0, 0], [0, 1, 1, 1, 1, 0, 0], [0, 1, 1, 1, 1, 1, 0], [1, 1, 0, 0, 0, 0, 0], [1, 1, 1, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0, 0], [1, 1, 1, 1, 1, 0, 0], [1, 1, 1, 1, 1, 1, 0], [1, 1, 1, 1, 1, 1, 1]]
+                var states = [
+                    [0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0, 0],
+                    [0, 0, 1, 1, 0, 0, 0],
+                    [0, 0, 1, 1, 1, 0, 0],
+                    [0, 0, 1, 1, 1, 1, 0],
+                    [0, 1, 0, 0, 0, 0, 0],
+                    [0, 1, 1, 0, 0, 0, 0],
+                    [0, 1, 1, 1, 0, 0, 0],
+                    [0, 1, 1, 1, 1, 0, 0],
+                    [0, 1, 1, 1, 1, 1, 0],
+                    [1, 1, 0, 0, 0, 0, 0],
+                    [1, 1, 1, 0, 0, 0, 0],
+                    [1, 1, 1, 1, 0, 0, 0],
+                    [1, 1, 1, 1, 1, 0, 0],
+                    [1, 1, 1, 1, 1, 1, 0],
+                    [1, 1, 1, 1, 1, 1, 1]
+                ];
                 return states[n];
             }
-            this.columns = []; for (var i = 0; i < 5; i++) { this.columns.push([0, 0, 0, 0, 0, 0, 0]); }
+
             function colVal(arr) {
                 var sum = 0;
                 for (var i = 0; i < arr.length; i++) {
-                    if (arr[i] == false) continue; 
-                    if (i < 2) sum += 5; 
-                    else sum += 1; 
+                    if (!arr[i]) continue;
+                    if (i < 2) sum += 5;
+                    else sum += 1;
                 }
                 return sum;
             }
-            function colState(val) { return getDisplayStates(val); }
+
             this.getValue = function () {
-                var sum = 0; 
+                var sum = 0;
                 for (var i = 0; i < this.columns.length; i++) {
-                    var place = Math.pow(10, (this.columns.length - i - 1))
+                    var place = Math.pow(10, (this.columns.length - i - 1));
                     sum += (colVal(this.columns[i]) * place);
                 }
                 return sum;
             }
+
             this.setValue = function (n) {
                 var sum = n;
                 for (var i = 0; i < this.columns.length; i++) {
                     var m = Math.pow(10, (this.columns.length - i - 1));
                     this.columns[i] = getDisplayStates(0);
-                    if (sum < m) { 
+                    if (sum < m) {
                         continue;
-                    }
-                    else{
+                    } else {
                         var remainder = sum % m;
-                        this.columns[i] = getDisplayStates((sum - remainder) / m); 
-                        sum = remainder; 
+                        this.columns[i] = getDisplayStates((sum - remainder) / m);
+                        sum = remainder;
                     }
                 }
-                if (sum != 0) { 
-                    console.log("Error: Number too large to display"); 
+                if (sum !== 0) {
+                    console.log("Error: Number too large to display");
                 }
             }
+
             this.toggleBead = function (col, row) {
-                var arr = this.columns[col]; 
-                var toggled = !arr[row]; 
-                arr[row] = toggled; 
-                if ((row == 0) && toggled) { 
-                    arr[1] = true; 
-                }
-                else if ((row == 1) && !toggled)
-                 { arr[0] = false; }
-                else if ((row > 1) && !toggled) { 
+                var arr = this.columns[col];
+                var toggled = !arr[row];
+                arr[row] = toggled;
+                if (row === 0 && toggled) {
+                    arr[1] = true;
+                } else if (row === 1 && !toggled) {
+                    arr[0] = false;
+                } else if (row > 1 && !toggled) {
                     for (var i = arr.length - 1; i > row; i--) {
-                         arr[i] = false; 
-                        } 
+                        arr[i] = false;
                     }
-                else if ((row > 1) && toggled) { 
-                    for (var i = row; i > 1; i--) { 
+                } else if (row > 1 && toggled) {
+                    for (var i = row; i > 1; i--) {
                         arr[i] = true;
-                    } 
+                    }
                 }
             }
         }
+
+        abacusMain();
     </script>
-
-</head>
-
-<body>
-    
-<script>
-    abacusMain();
-</script>
 
 </body>
 
