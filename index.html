@@ -11,15 +11,23 @@
             background-color: rgb(33, 2, 2);
         }
     </style> -->
-
+    <style>
+        #abacus {
+            position: absolute;
+            width: 400px;
+            height: 290px;
+            margin: auto;
+            display: block;
+            top: 200px;
+            left: 110px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="abacus" style="position:relative; width:400px; height:290px; margin:auto; display:block;"></div>
+    <div id="abacus"></div>
     <div style="margin:auto; padding:10px;">
-       
     </div>
-
     <script>
         var beadSize = 32,
             beadStroke = 'rgba(0,0,0,.25)',
@@ -32,7 +40,7 @@
             frameThickness = 8,
             width = 400,
             height = 211;
-        
+
         function abacusMain() {
             createHTML();
             abacus = new Abacus();
